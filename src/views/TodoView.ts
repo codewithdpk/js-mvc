@@ -1,3 +1,5 @@
+import { Todo } from "../models/TodoModel";
+
 export class TodoView {
   app: Element;
   title: Element;
@@ -38,4 +40,59 @@ export class TodoView {
   getElement(selector: keyof HTMLElementTagNameMap | string) {
     return document.querySelector(selector);
   }
+
+  get _todoText() {
+    return this.input.value;
+  }
+
+  _resetInput() {
+    this.input.value = "";
+  }
+
+  displayAllTodos(todos: Todo[]) {
+    while (this.todoList.firstChild) {
+      this.todoList.removeChild(this.todoList.firstChild);
+    }
+
+    if (todos.length === 0) {
+      const p = this.createElement("p");
+      p.textContent = "No todos found.";
+      this.todoList.append(p);
+    } else {
+      todos.forEach((todo) => {
+        const li = this.createElement("li");
+        li.id = `todo-${todo.id}`;
+
+        const checkbox = this.createElement("input") as HTMLInputElement;
+        checkbox.type = "checkbox";
+        checkbox.checked = todo.completed;
+
+        const content = this.createElement("span");
+
+        if (todo.completed) {
+          const strike = this.createElement("s");
+          strike.textContent = todo.text;
+          content.append(strike);
+        } else {
+          content.textContent = todo.text;
+        }
+
+        const deleteButton = this.createElement("button", "delete");
+        deleteButton.textContent = "Delete";
+
+        li.append(checkbox, content, deleteButton);
+
+        this.todoList.append(li);
+      });
+    }
+  }
+
+  // bindAddTodo() {
+  //   this.todoList.addEventListener('submit',(event)=>{
+  //    event.preventDefault()
+  //    if(this._todoText){
+  //     handler(this._todoText)
+  //    }
+  //   })
+  // }
 }

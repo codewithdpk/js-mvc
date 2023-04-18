@@ -5,9 +5,10 @@ export interface Todo {
 }
 
 export class TodoModel {
-  private todos: Todo[];
+  todos: Todo[];
+
   constructor() {
-    this.todos = [];
+    this.todos = [{ id: 1, text: "Pet my cat", completed: false }];
   }
 
   addTodo(text: string) {
@@ -20,5 +21,10 @@ export class TodoModel {
 
   deleteTodo(id: number) {
     this.todos = this.todos.filter((todo) => todo.id !== id);
+  }
+
+  _commit(todos: Todo[]) {
+    // this.onTodoListChanged(todos)
+    localStorage.setItem("todos", JSON.stringify(todos));
   }
 }

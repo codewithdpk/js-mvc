@@ -7,5 +7,6 @@ export class MainController {
   constructor(model: TodoModel, view: TodoView) {
     this.model = model;
     this.view = view;
+    this.view.displayAllTodos(this.model.todos);
   }
 }
